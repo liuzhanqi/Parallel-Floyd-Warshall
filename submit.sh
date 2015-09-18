@@ -5,8 +5,7 @@
 #------------------------------------------------
 
 RunMPI () {
-	# out_file=$1
-	echo "arg 1: $1"
+	out_file=$1
 	for mat_size in ${@:2:$#}
 	do
 		echo "running with mat size: $mat_size..."
