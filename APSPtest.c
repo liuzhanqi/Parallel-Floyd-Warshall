@@ -146,6 +146,10 @@ int main(int argc, char **argv) {
 	int* ref;
 	int* result;
 	if (my_rank == 0) {
+		for (int i = 0; i < 20; i++)
+			printf("~");
+		printf("\n");
+		printf("Using MPT_*v to support undivisible number of vertex...\n");
 		printf("Input size: %ld\n", mat_size);
 		printf("Total process: %d\n", total_rank);
 
@@ -170,7 +174,7 @@ int main(int argc, char **argv) {
 	printf("Mainly have %d rows, I charges %d rows.\n", mainly_have_rows, rows_in_charge);
 #endif
 
-	//TODO should this be included in the timer?
+	// should this be included in the timer?
 	int* my_rows = (int*)malloc(sizeof(int) * mat_size * rows_in_charge); //rows the current process have
 	int* k_to_j = (int*)malloc(sizeof(int) * mat_size); // the vertical (column)
 	int* rows_distribution = (int*)malloc(sizeof(int) * total_rank); //how many rows does process i have
@@ -304,6 +308,15 @@ int main(int argc, char **argv) {
 	if (my_rank == 0)
 		gettimeofday(&timer_comm, NULL);
 	// collect result to process 0
+	// MPI_Gather(
+	//     void* send_data,
+	//     int send_count,
+	//     MPI_Datatype send_datatype,
+	//     void* recv_data,
+	//     int recv_count,
+	//     MPI_Datatype recv_datatype,
+	//     int root,
+	//     MPI_Comm communicator)
 	// int MPI_Gatherv(
 	// 	const void *sendbuf, 
 	// 	int sendcount, 
@@ -346,7 +359,6 @@ int main(int argc, char **argv) {
 		printf("Time used (parallel  ) setup: %6ld usecs (%2.3lf%%) \n", time_setup, time_setup / (double)time_used_parallel * 100);
 		printf("Time used (parallel  ) comm : %6ld usecs (%2.3lf%%) \n", time_comm, time_comm / (double)time_used_parallel * 100);
 		printf("Speed up (sequential / parallel): %.3lf\n", time_used_sequential / (double)time_used_parallel);
-
 #ifdef DEBUG_MSG
 		printf("Correct Answer: \n");
 		show_dd_matrix(ref, mat_size, mat_size);
@@ -360,6 +372,9 @@ int main(int argc, char **argv) {
 			printf("Your result is correct.\n");
 		else
 			printf("Your result is wrong.\n");
+		for (int i = 0; i < 20; i++)
+			printf("~");
+		printf("\n");
 	}
 
     // Finalize the MPI environment.
