@@ -22,14 +22,12 @@ bool CmpArray(const int *l, const int *r, const size_t eleNum)
 /*
 	Sequential (Single Thread) APSP on CPU.
 */
-long long ST_APSP(int *mat, const size_t N)
+void ST_APSP(int *mat, const size_t N)
 {
-	long long op = 0;
 	for(int k = 0; k < N; k ++)
 		for(int i = 0; i < N; i ++)
 			for(int j = 0; j < N; j ++)
 			{
-				op++;
 				int i0 = i*N + j;
 				int i1 = i*N + k;
 				int i2 = k*N + j;
@@ -40,7 +38,6 @@ long long ST_APSP(int *mat, const size_t N)
  					     mat[i0] = sum;
 				}
 			}
-	return op;
 }
 
 

@@ -73,10 +73,10 @@ void prepare_data(int** mat, int** ref, int** result, int mat_size) {
 	memcpy(*ref, *mat, sizeof(int) * mat_size * mat_size);
 	// start sequential timer
 	gettimeofday(&timer_sequential, NULL);
-	long long op = ST_APSP(*ref, mat_size);
+	ST_APSP(*ref, mat_size);
 	// stop sequential timer
 	time_used_sequential = get_time_and_replace(&timer_sequential);
-	printf("Time used (sequential): %8ld usecs, operations: %12lld\n", time_used_sequential, op);
+	printf("Time used (sequential): %8ld usecs\n", time_used_sequential);
 
 	// compute your result
 	*result = (int*)malloc(sizeof(int) * mat_size * mat_size);
@@ -203,8 +203,6 @@ int main(int argc, char **argv) {
 
 	preprocess_graph(my_rows, rows_in_charge, mat_size);
 
-	// track number of operations performed
-	long long op = 0;
 	for (int k = 0; k < mat_size; k++) {
 		if (my_rank == 0)
 			gettimeofday(&timer_comm, NULL);
@@ -243,9 +241,9 @@ int main(int argc, char **argv) {
 
 		for (int i = 0; i < rows_in_charge; i++) {
 			for (int j = 0; j < mat_size; j++) {
-				op++;
 				int cur_index = i * mat_size + j;
-				my_rows[cur_index] = min(my_rows[cur_index], my_rows[i * mat_size + k] + k_to_j[j]);
+				if (my_rows[cur_index] > my_rows[i * mat_size + k] + k_to_j[j])
+					my_rows[cur_index] = my_rows[i * mat_size + k] + k_to_j[j];
 			}
 		}
 
@@ -303,22 +301,10 @@ int main(int argc, char **argv) {
 	if (my_rank == 0)
 		time_comm += get_time_and_replace(&timer_comm);
 
-	// collect total number of operations from all processes
-	// MPI_Reduce(
-	//     void* send_data,
-	//     void* recv_data,
-	//     int count,
-	//     MPI_Datatype datatype,
-	//     MPI_Op op,
-	//     int root,
-	//     MPI_Comm communicator)
-	long long total_op = 0;
-	MPI_Reduce(&op, &total_op, 1, MPI_LONG_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-
 	if (my_rank == 0) {
 		//stop the timer
 		time_used_parallel = get_time_and_replace(&timer_parallel);
-		printf("Time used (parallel  ): %8ld usecs, operations: %12lld\n", time_used_parallel, total_op);
+		printf("Time used (parallel  ): %8ld usecs\n", time_used_parallel);
 		printf("Time used (parallel  ) setup: %6ld usecs (%2.3lf%%) \n", time_setup, time_setup / (double)time_used_parallel * 100);
 		printf("Time used (parallel  ) comm : %6ld usecs (%2.3lf%%) \n", time_comm, time_comm / (double)time_used_parallel * 100);
 		printf("Speed up (sequential / parallel): %.3lf\n", time_used_sequential / (double)time_used_parallel);

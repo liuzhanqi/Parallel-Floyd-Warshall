@@ -28,6 +28,6 @@ bool CmpArray(const int *l, const int *r, const size_t eleNum);
 //            mat should have been allocated before callling this function.
 //            The result will be directed stored in mat.
 // const int N - the number of vertices.
-long long ST_APSP(int *mat, const size_t N);
+void ST_APSP(int *mat, const size_t N);
 
 #endif
