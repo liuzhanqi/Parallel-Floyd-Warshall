@@ -12,9 +12,16 @@
 
 int my_rank;
 int total_rank;
-struct timeval tv1,tv2;
+
+struct timeval timer_sequential;
 long time_used_sequential;
+struct timeval timer_parallel;
 long time_used_parallel;
+
+struct timeval timer_comm;
+long time_comm;
+struct timeval timer_setup;
+long time_setup;
 
 #ifdef DEBUG_MSG
 void shout_name() {
@@ -43,6 +50,19 @@ void show_arr(int* arr, int size) {
 }
 #endif
 
+// helper function for struct timeval
+long get_time_interval(struct timeval t_from, struct timeval t_to) {
+	return (t_from.tv_sec - t_to.tv_sec) * 1000000 + t_from.tv_usec - t_to.tv_usec;
+}
+long get_time_and_replace(struct timeval *then) {
+	struct timeval* now = (struct timeval*)malloc(sizeof(struct timeval));
+	gettimeofday(now, NULL);
+
+	long interval = get_time_interval(*now, *then);
+	then = now;
+	return interval;
+}
+
 void prepare_data(int** mat, int** ref, int** result, int mat_size) {
 	//generate a random matrix.
 	*mat = (int*)malloc(sizeof(int) * mat_size * mat_size);
@@ -52,12 +72,11 @@ void prepare_data(int** mat, int** ref, int** result, int mat_size) {
 	*ref = (int*)malloc(sizeof(int) * mat_size * mat_size);
 	memcpy(*ref, *mat, sizeof(int) * mat_size * mat_size);
 	// start sequential timer
-	gettimeofday(&tv1, NULL);
+	gettimeofday(&timer_sequential, NULL);
 	long long op = ST_APSP(*ref, mat_size);
 	// stop sequential timer
-	gettimeofday(&tv2, NULL);
-	time_used_sequential = (tv2.tv_sec - tv1.tv_sec) * 1000000 + tv2.tv_usec - tv1.tv_usec;
-	printf("Time used (sequential): %8ld usecs (?!) op: %12lld\n", time_used_sequential, op);
+	time_used_sequential = get_time_and_replace(&timer_sequential);
+	printf("Time used (sequential): %8ld usecs, operations: %12lld\n", time_used_sequential, op);
 
 	// compute your result
 	*result = (int*)malloc(sizeof(int) * mat_size * mat_size);
@@ -133,10 +152,14 @@ int main(int argc, char **argv) {
 		prepare_data(&mat, &ref, &result, mat_size);
 
 		// start the timer
-		gettimeofday(&tv1, NULL);	
+		gettimeofday(&timer_parallel, NULL);
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);
+
+	// start timer for setup
+	if (my_rank == 0)
+		gettimeofday(&timer_setup, NULL);
 
 	// know the set of rows I am working on according to my_rank 
 	int mainly_have_rows;
@@ -156,6 +179,9 @@ int main(int argc, char **argv) {
 	int* ele_offset = (int*)malloc(sizeof(int) * total_rank); //how many numbers does process (0..i-1) have
 	get_distribution_array(mat_size, mainly_have_rows, total_rank, rows_distribution, rows_offset, ele_distribution, ele_offset);
 
+	if (my_rank == 0)
+		time_setup += get_time_and_replace(&timer_setup);
+
 #ifdef DEBUG_MSG
 	shout_name();
 	printf("ele_distribution: \n");
@@ -164,6 +190,8 @@ int main(int argc, char **argv) {
 	show_arr(ele_offset, total_rank);
 #endif
 
+	if (my_rank == 0)
+		gettimeofday(&timer_comm, NULL);
 	// divide the matrix for each process
 	// send rows to each process using scatter, sendbuf:*result, recvbuf:*my_rows
 	// MPI_Scatter(
@@ -196,7 +224,8 @@ int main(int argc, char **argv) {
 		MPI_INT, 
 		0, 
 		MPI_COMM_WORLD);
-
+	if (my_rank == 0)
+		time_comm += get_time_and_replace(&timer_comm);
 #ifdef DEBUG_MSG
 	shout_name();
 	printf("my_rows: \n");
@@ -208,17 +237,21 @@ int main(int argc, char **argv) {
 	// track number of operations performed
 	long long op = 0;
 	for (int k = 0; k < mat_size; k++) {
+		if (my_rank == 0)
+			gettimeofday(&timer_comm, NULL);
 		// broadcast k-th row to other process if I am the owner
+		int owner_of_k_row = k / mainly_have_rows;
+		if (my_rank == owner_of_k_row)
+			memcpy(k_to_j, my_rows + mat_size * (k % mainly_have_rows), sizeof(int) * mat_size);
 		// MPI_Bcast(
 		//     void* data,
 		//     int count,
 		//     MPI_Datatype datatype,
 		//     int root,
 		//     MPI_Comm communicator)
-		int owner_of_k_row = k / mainly_have_rows;
-		if (my_rank == owner_of_k_row)
-			memcpy(k_to_j, my_rows + mat_size * (k % mainly_have_rows), sizeof(int) * mat_size);
 		MPI_Bcast(k_to_j, mat_size, MPI_INT, owner_of_k_row, MPI_COMM_WORLD);
+		if (my_rank == 0)
+			time_comm += get_time_and_replace(&timer_comm);
 
 #ifdef DEBUG_MSG
 		if (my_rank == 1)
@@ -268,6 +301,8 @@ int main(int argc, char **argv) {
 #endif
 	}
 
+	if (my_rank == 0)
+		gettimeofday(&timer_comm, NULL);
 	// collect result to process 0
 	// int MPI_Gatherv(
 	// 	const void *sendbuf, 
@@ -289,6 +324,8 @@ int main(int argc, char **argv) {
 		MPI_INT,
 		0,
 		MPI_COMM_WORLD);
+	if (my_rank == 0)
+		time_comm += get_time_and_replace(&timer_comm);
 
 	// collect total number of operations from all processes
 	// MPI_Reduce(
@@ -304,10 +341,11 @@ int main(int argc, char **argv) {
 
 	if (my_rank == 0) {
 		//stop the timer
-		gettimeofday(&tv2, NULL);
-		time_used_parallel = (tv2.tv_sec - tv1.tv_sec) * 1000000 + tv2.tv_usec - tv1.tv_usec;
-		printf("Time used (parallel  ): %8ld usecs (?!) op: %12lld\n", time_used_parallel, total_op);
-		printf("Speed up (sequential / parallel): %.3lf (?!)\n", time_used_sequential / (double)time_used_parallel);
+		time_used_parallel = get_time_and_replace(&timer_parallel);
+		printf("Time used (parallel  ): %8ld usecs, operations: %12lld\n", time_used_parallel, total_op);
+		printf("Time used (parallel  ) setup: %6ld usecs (%2.3lf%%) \n", time_setup, time_setup / (double)time_used_parallel * 100);
+		printf("Time used (parallel  ) comm : %6ld usecs (%2.3lf%%) \n", time_comm, time_comm / (double)time_used_parallel * 100);
+		printf("Speed up (sequential / parallel): %.3lf\n", time_used_sequential / (double)time_used_parallel);
 
 #ifdef DEBUG_MSG
 		printf("Correct Answer: \n");
