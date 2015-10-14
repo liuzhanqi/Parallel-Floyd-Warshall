@@ -24,6 +24,13 @@ bool CmpArray(const int *l, const int *r, const size_t eleNum)
 */
 void ST_APSP(int *mat, const size_t N)
 {
+	// for(int i = 0; i < N; i ++)
+	// 	for(int j = 0; j < N; j ++)
+	// 	{
+	// 		int ij = i * N + j;
+	// 		if (mat[ij] == -1)
+	// 			mat[ij] = 33;
+	// 	}
 	for(int k = 0; k < N; k ++)
 		for(int i = 0; i < N; i ++)
 			for(int j = 0; j < N; j ++)
@@ -31,6 +38,9 @@ void ST_APSP(int *mat, const size_t N)
 				int i0 = i*N + j;
 				int i1 = i*N + k;
 				int i2 = k*N + j;
+				// int sum =  (mat[i1] + mat[i2]);
+				// if (sum < mat[i0])
+ 			// 		mat[i0] = sum;
 				if(mat[i1] != -1 && mat[i2] != -1)
                      { 
 			          int sum =  (mat[i1] + mat[i2]);

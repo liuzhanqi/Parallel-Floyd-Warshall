@@ -15,6 +15,10 @@ qsub -pe mpich 6 -v mat_size="600 1200 2400 4800" mysge.sh
 # check first
 ./run_mpi.sh
 ./run_mpi.sh -l 0 -i "APSPtest.c MatUtil.c" -o "apsp" -c "2 4 6 8" -m "600 1200 2400 4800"
+./run_mpi.sh -l 0 -i "APSPtest.c MatUtil.c" -o "apsp" -c "10" -m "1200"
+
+./run_mpi.sh -l 0 -i "APSPtest_divisible.c MatUtil.c" -o "apsp" -c "2 4 6 8" -m "600 1200 2400 4800"
+
 
 #check out the result or error log
 cat /home/team12/mysge.sh.o5981

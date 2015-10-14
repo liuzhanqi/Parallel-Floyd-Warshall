@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
 	show_dd_matrix(my_rows, rows_in_charge, mat_size);
 #endif
 
-	preprocess_graph(my_rows, rows_in_charge, mat_size);
+	// preprocess_graph(my_rows, rows_in_charge, mat_size);
 
 	for (int k = 0; k < mat_size; k++) {
 		if (my_rank == 0)
@@ -277,8 +277,17 @@ int main(int argc, char **argv) {
 		for (int i = 0; i < rows_in_charge; i++) {
 			for (int j = 0; j < mat_size; j++) {
 				int cur_index = i * mat_size + j;
-				if (my_rows[cur_index] > my_rows[i * mat_size + k] + k_to_j[j])
-					my_rows[cur_index] = my_rows[i * mat_size + k] + k_to_j[j];
+
+				// faster version with preprocess
+				// if (my_rows[cur_index] > my_rows[i * mat_size + k] + k_to_j[j])
+				// 	my_rows[cur_index] = my_rows[i * mat_size + k] + k_to_j[j];
+
+				int ik = i * mat_size + k;
+				if (my_rows[ik] != -1 && k_to_j[j] != -1) { 
+			        int sum = my_rows[ik] + k_to_j[j];
+                    if (my_rows[cur_index] == -1 || sum < my_rows[cur_index])
+ 					    my_rows[cur_index] = sum;
+				}
 			}
 		}
 
