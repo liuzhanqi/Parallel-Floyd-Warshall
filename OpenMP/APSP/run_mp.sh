@@ -35,34 +35,42 @@ printf "... out_file  = %s\n" "$out_file"
 printf "... num_cores = %s\n" "$num_cores"
 printf "... mat_size  = %s\n" "$mat_size"
 
-echo "mpicc -O3 -std=c99 -o $out_file $in_files"
-mpicc -O3 -std=c99 -o $out_file $in_files
+if type "icc" > /dev/null; then
+	echo "icc –openmp –O3 –std=c99 –o $out_file $in_files"
+	icc -openmp -O3 -std=c99 -o $out_file $in_files
+elif type "gcc-5" > /dev/null; then
+	echo "gcc-5 -openmp -O3 -I/usr/include -L/usr/lib -o $out_file $in_files"
+	gcc-5 -fopenmp -O3 -I/usr/include -L/usr/lib -o $out_file $in_files
+else
+	echo "compiler icc/gcc-5 not found."
+	exit 1
+fi
 
 compile_result=$?
-
-echo "Compilation finished with $compile_result..."
+echo "Compilation finished: $compile_result"
 if [ $compile_result -ne 0 ]; then
-	echo "abort."
-	exit
+	echo "Compilation Error."
+	exit $compile_result
 else
 	for core in $num_cores
 	do
-		echo "running with $core cores..."
+		echo "=== === === === === === === === === ==="
+		export OMP_NUM_THREADS="$core"
 		if [ $running_locally -eq 0 ]; then
-			echo "qsub -pe mpich $core -v mat_size=\"$mat_size\" mysge.sh"
-			qsub -pe mpich $core -v mat_size="$mat_size" -v out_file="$out_file" submit.sh
+			echo "do nothing..."
+			# echo "qsub -pe mpich $core -v mat_size=\"$mat_size\" mysge.sh"
+			# qsub -pe mpich $core -v mat_size="$mat_size" -v out_file="$out_file" submit.sh
 		else
 			for size in $mat_size
 			do
-				echo "running with mat size: $size"
-				echo "mpirun -np $core $out_file $size"
-				mpirun -np $core $out_file $size
+				echo "running: $core cores $size vertex"
+				./$out_file $size
+				echo "--- --- --- --- --- --- --- --- --- ---"
+
+				sleep 1
 			done
 		fi
 	done
 fi
 
-echo "--- all done ---"
 
-# mpicc -O3 -o apsp ./*.c
-# mpirun -np 2 apsp

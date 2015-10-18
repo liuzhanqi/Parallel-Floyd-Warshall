@@ -1,7 +1,7 @@
 # 
-# ssh chen0818@17221148161
+# ssh chen0818@172.21.148.161
 # 
-# scp -r /Users/cly/Dropbox/code/Parallel-Floyd-Warshall/OpenMP/* chen0818@17221148161:~/4011_lab2
+# scp -r /Users/cly/Dropbox/code/Parallel-Floyd-Warshall/OpenMP/* chen0818@172.21.148.161:~/4011_lab2
 # 
 # icc –O3 –std=c99 –o APSPtest APSPtest.c MatUtil.c
 # ./APSPtest N
@@ -13,12 +13,10 @@
 # To set the number of threads to p before execution, type:
 # export OMP_NUM_THREADS=p
 # 
+# ./run_mp.sh -l 1 -i "APSPtest.c MatUtil.c" -o "apsp" -c "2 4 6 8" -m "720 1440"
 # 
 # 
 # 
-# 
-# gcc -O3 -std=c99 -o apspseq APSPsequential.c MatUtil.c
-# apspseq 1200
 # 
 # #submit my job
 # cd /home/team12/lab1
