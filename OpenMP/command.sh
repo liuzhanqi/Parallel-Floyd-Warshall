@@ -18,9 +18,4 @@
 # 
 # 
 # 
-# #submit my job
-# cd /home/team12/lab1
-# qsub -pe mpich 6 -v mat_size="600 1200 2400 4800" mysge.sh
-# 
-# 
 # 
