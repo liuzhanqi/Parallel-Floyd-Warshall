@@ -6,24 +6,58 @@
 
 #include <omp.h>
 
-void PL_APSP_2(int* mat, int N) {
-	int all = omp_get_max_threads();
-	int per = N / all;
-	printf("omp_get_max_threads = %d, per = %d\n", all, per);
-	#pragma omp parallel
+// #define APPROACH -1
+
+#if APPROACH == 0
+
+int per, tid, i0, i1, i2, sum, i, j, k;
+#pragma omp threadprivate(tid, i0, i1, i2, sum, i, j)
+
+void PL_APSP_X(int* mat, int N, int num_thread) {
+	per = N / num_thread;
+	k = 0;
+	#pragma omp parallel shared(per, k)
 	{
-		int tid = omp_get_thread_num();
-		for (int k = 0; k < N; k++) {
-			for (int i = per * (tid); i < per * (tid + 1); i++) {
-				for (int j = 0; j < N; j++) {
-					int i0 = i * N + j;
-					int i1 = i * N + k;
-					int i2 = k * N + j;
-					if (mat[i1] != -1 && mat[i2] != -1) { 
-				        int sum =  (mat[i1] + mat[i2]);
-	                    if (mat[i0] == -1 || sum < mat[i0])
-					    	mat[i0] = sum;
-					}
+		tid = omp_get_thread_num();
+		while (k < N) {
+			for (i = per * tid; i < per * (tid + 1); ++i) {
+				for (j = 0; j < N; ++j) {
+					i0 = i * N + j;
+					i1 = i * N + k;
+					i2 = k * N + j;
+					sum = mat[i1] + mat[i2];
+					if (sum < mat[i0])
+						mat[i0] = sum;
+				}
+			}
+			#pragma omp master
+			{
+				k++;
+			}
+			#pragma omp barrier
+		}
+	}
+}
+
+#elif APPROACH == 1
+
+int per, tid, i0, i1, i2, sum, i, j, k;
+#pragma omp threadprivate(tid, i0, i1, i2, sum, i, j, k)
+
+void PL_APSP_X(int* mat, int N, int num_thread) {
+	per = N / num_thread;
+	#pragma omp parallel shared(per)
+	{
+		tid = omp_get_thread_num();
+		for (k = 0; k < N; k++) {
+			for (i = per * tid; i < per * (tid + 1); ++i) {
+				for (j = 0; j < N; ++j) {
+					i0 = i * N + j;
+					i1 = i * N + k;
+					i2 = k * N + j;
+					sum = mat[i1] + mat[i2];
+					if (sum < mat[i0])
+						mat[i0] = sum;
 				}
 			}
 			#pragma omp barrier
@@ -31,75 +65,115 @@ void PL_APSP_2(int* mat, int N) {
 	}
 }
 
-void PL_APSP_1(int* mat, int N) {
-	printf("omp_get_max_threads = %d\n", omp_get_max_threads());
-	#pragma omp parallel shared(mat, N)
+#elif APPROACH == 2
+
+void PL_APSP_X(int* mat, int N, int num_thread) {
+	int per = N / num_thread, tid, i0, i1, i2, sum, i, j, k = 0;
+	#pragma omp parallel shared(per, k) private(tid, i0, i1, i2, sum, i, j)
 	{
-		for (int k = 0; k < N; k++) {
-			#pragma omp for nowait schedule(static)
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					int i0 = i * N + j;
-					int i1 = i * N + k;
-					int i2 = k * N + j;
-					if (mat[i1] != -1 && mat[i2] != -1) { 
-				        int sum =  (mat[i1] + mat[i2]);
-	                    if (mat[i0] == -1 || sum < mat[i0])
-					    	mat[i0] = sum;
-					}
+		tid = omp_get_thread_num();
+		while (k < N) {
+			for (i = per * tid; i < per * (tid + 1); ++i) {
+				for (j = 0; j < N; ++j) {
+					i0 = i * N + j;
+					i1 = i * N + k;
+					i2 = k * N + j;
+					sum = mat[i1] + mat[i2];
+					if (sum < mat[i0])
+						mat[i0] = sum;
 				}
 			}
+			#pragma omp master
+			{
+				k++;
+			}
+			#pragma omp barrier
 		}
 	}
 }
 
-void PL_APSP(int* mat, int N) {
-	PL_APSP_2(mat, N);
+#elif APPROACH == 3
+
+void PL_APSP_X(int* mat, int N, int num_thread) {
+	int per = N / num_thread, tid, i0, i1, i2, sum, i, j, k;
+	#pragma omp parallel shared(per) private(tid, i0, i1, i2, sum, i, j, k)
+	{
+		tid = omp_get_thread_num();
+		for (k = 0; k < N; k++) {
+			for (i = per * tid; i < per * (tid + 1); ++i) {
+				for (j = 0; j < N; ++j) {
+					i0 = i * N + j;
+					i1 = i * N + k;
+					i2 = k * N + j;
+					sum = mat[i1] + mat[i2];
+					if (sum < mat[i0])
+						mat[i0] = sum;
+				}
+			}
+			#pragma omp barrier
+		}
+	}
 }
 
-long get_time_and_replace(struct timeval *then) {
-	// return time from then to now in usec, and assign now to then
+#else
 
+void PL_APSP_X(int* mat, int N, int num_thread) {
+	printf("[INVALID VALUE FOR APPROACH]\n");
+}
+
+#endif
+
+void PL_APSP(int* mat, int N, int num_thread) {
+	printf("omp_get_num_threads = %d\n", num_thread);
+	omp_set_num_threads(num_thread);
+	PL_APSP_X(mat, N, num_thread);
+}
+
+long get_time(struct timeval *then) {
+	// return time from [then] to [now] in usec
 	long then_sec = then->tv_sec;
 	long then_usec = then->tv_usec;
 	gettimeofday(then, NULL);
 
-	long interval = (then->tv_sec - then_sec) * 1000000 + then->tv_usec - then_usec;
-	return interval;
+	return (then->tv_sec - then_sec) * 1000000 + then->tv_usec - then_usec;
 }
 
 int main(int argc, char **argv) {
-	if (argc != 2) {
-		printf("Usage: test {N}\n");
+	if (argc < 3) {
+		printf("Usage: test {N - #node} {M - #thread}\n");
 		exit(-1);
 	}
 
 	// generate a random matrix.
 	size_t N = atoi(argv[1]);
+	int num_thread = atoi(argv[2]);
 	int *mat = (int*)malloc(sizeof(int) * N * N);
 	GenMatrix(mat, N);
-	printf("Graph Size: %d, Time (usec):\n", N);
+
+	printf("Graph Size: %d, #thread: %d, Time (usec):\n", N, num_thread);
 
 	// compute the reference result.
 	int *ref = (int*)malloc(sizeof(int) * N * N);
 	memcpy(ref, mat, sizeof(int)*N*N);
 
-	struct timeval* time_seq_start = (struct timeval*)malloc(sizeof(struct timeval));
-	gettimeofday(time_seq_start, NULL);;
+	struct timeval time_seq_start;
+	gettimeofday(&time_seq_start, NULL);;
 	ST_APSP(ref, N);
-	long time_seq_used = get_time_and_replace(time_seq_start);
+	long time_seq_used = get_time(&time_seq_start);
 	printf("Sequential: %8ld\n", time_seq_used);
 
 	// compute your results
 	int *result = (int*)malloc(sizeof(int) * N * N);
 	memcpy(result, mat, sizeof(int) * N * N);
 
-	//replace by parallel algorithm	
-	struct timeval* time_para_start = (struct timeval*)malloc(sizeof(struct timeval));
-	gettimeofday(time_para_start, NULL);;
-	PL_APSP(result, N);
-	long time_para_used = get_time_and_replace(time_para_start);
-	printf("Parallel  : %8ld (%.3lf speedup)\n", time_para_used, time_seq_used / (float)time_para_used);
+	// replace by parallel algorithm
+	for (int t = 2; t <= num_thread; t += 2) {
+		struct timeval time_para_start;
+		gettimeofday(&time_para_start, NULL);
+		PL_APSP(result, N, t);
+		long time_para_used = get_time(&time_para_start);
+		printf("Parallel(%d): %8ld (%.3lf speedup)\n", APPROACH, time_para_used, time_seq_used / (float)time_para_used);		
+	}
 
 	// compare your result with reference result
 	if (CmpArray(result, ref, N * N))
@@ -107,4 +181,5 @@ int main(int argc, char **argv) {
 		// printf("Your result is correct.\n");
 	else
 		printf("Your result is wrong.\n");
+	printf("\n");
 }

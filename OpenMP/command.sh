@@ -1,13 +1,10 @@
 # 
-# ssh chen0818@172.21.148.161
+# ssh chen0818@172.21.148.162
 # 
-# scp -r /Users/cly/Dropbox/code/Parallel-Floyd-Warshall/OpenMP/* chen0818@172.21.148.161:~/4011_lab2
+# scp -r /Users/cly/Dropbox/code/Parallel-Floyd-Warshall/OpenMP/* chen0818@172.21.148.162:~/4011_lab2
 # 
-# icc –O3 –std=c99 –o APSPtest APSPtest.c MatUtil.c
-# ./APSPtest N
-# 
-# icc –openmp –O3 –std=c99 –o APSPtest APSPtest.c MatUtil.c
-# ./APSPtest N
+# icc –openmp –O3 –std=c99 –o apsp *.c
+# ./apsp N
 # 
 # By default 12 threads will be used (6 processing cores with hyperthreading).
 # To set the number of threads to p before execution, type:
