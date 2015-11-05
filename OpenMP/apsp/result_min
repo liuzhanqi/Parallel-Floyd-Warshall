@@ -1,0 +1,166 @@
+Graph Size: 360, #thread: 16, Time (usec):
+Sequential:    93405
+omp_get_num_threads = 2
+Parallel(0):    30389 (3.074 speedup)
+omp_get_num_threads = 4
+Parallel(0):    14869 (6.282 speedup)
+omp_get_num_threads = 6
+Parallel(0):    10155 (9.198 speedup)
+omp_get_num_threads = 8
+Parallel(0):    14813 (6.306 speedup)
+omp_get_num_threads = 10
+Parallel(0):    12117 (7.709 speedup)
+omp_get_num_threads = 12
+Parallel(0):    12326 (7.578 speedup)
+
+Graph Size: 720, #thread: 16, Time (usec):
+Sequential:   598896
+omp_get_num_threads = 2
+Parallel(0):   292036 (2.051 speedup)
+omp_get_num_threads = 4
+Parallel(0):   114317 (5.239 speedup)
+omp_get_num_threads = 6
+Parallel(0):    76845 (7.794 speedup)
+omp_get_num_threads = 8
+Parallel(0):   112626 (5.318 speedup)
+omp_get_num_threads = 10
+Parallel(0):    83953 (7.134 speedup)
+omp_get_num_threads = 12
+Parallel(0):    70641 (8.478 speedup)
+omp_get_num_threads = 16
+Parallel(0):   101645 (5.892 speedup)
+
+Graph Size: 1440, #thread: 16, Time (usec):
+Sequential:  4012879
+omp_get_num_threads = 2
+Parallel(0):  1628673 (2.464 speedup)
+omp_get_num_threads = 4
+Parallel(0):   798037 (5.028 speedup)
+omp_get_num_threads = 6
+Parallel(0):   548194 (7.320 speedup)
+omp_get_num_threads = 8
+Parallel(0):   820560 (4.890 speedup)
+omp_get_num_threads = 10
+Parallel(0):   659617 (6.084 speedup)
+omp_get_num_threads = 12
+Parallel(0):   550904 (7.284 speedup)
+omp_get_num_threads = 16
+Parallel(0):   674656 (5.948 speedup)
+
+Graph Size: 2880, #thread: 16, Time (usec):
+Sequential: 35307074
+omp_get_num_threads = 2
+Parallel(0): 14390974 (2.453 speedup)
+omp_get_num_threads = 4
+Parallel(0):  7426090 (4.754 speedup)
+omp_get_num_threads = 6
+Parallel(0):  5580055 (6.327 speedup)
+omp_get_num_threads = 8
+Parallel(0):  7318374 (4.824 speedup)
+omp_get_num_threads = 10
+Parallel(0):  5805750 (6.081 speedup)
+omp_get_num_threads = 12
+Parallel(0):  5208576 (6.779 speedup)
+omp_get_num_threads = 16
+Parallel(0):  6744846 (5.235 speedup)
+
+Graph Size: 4320, #thread: 16, Time (usec):
+Sequential: 118297833
+omp_get_num_threads = 2
+Parallel(0): 45317388 (2.610 speedup)
+omp_get_num_threads = 4
+Parallel(0): 23979345 (4.933 speedup)
+omp_get_num_threads = 6
+Parallel(0): 20006364 (5.913 speedup)
+omp_get_num_threads = 8
+Parallel(0): 23913620 (4.947 speedup)
+omp_get_num_threads = 10
+Parallel(0): 19673683 (6.013 speedup)
+omp_get_num_threads = 12
+Parallel(0): 18370608 (6.440 speedup)
+omp_get_num_threads = 16
+Parallel(0): 22037413 (5.368 speedup)
+
+Graph Size: 360, #thread: 16, Time (usec):
+Sequential:   122093
+omp_get_num_threads = 2
+Parallel(1):    65919 (1.852 speedup)
+omp_get_num_threads = 4
+Parallel(1):    24620 (4.959 speedup)
+omp_get_num_threads = 6
+Parallel(1):    12428 (9.824 speedup)
+omp_get_num_threads = 8
+Parallel(1):    15446 (7.905 speedup)
+omp_get_num_threads = 10
+Parallel(1):    12092 (10.097 speedup)
+omp_get_num_threads = 12
+Parallel(1):    10380 (11.762 speedup)
+
+Graph Size: 720, #thread: 16, Time (usec):
+Sequential:   599052
+omp_get_num_threads = 2
+Parallel(1):   214367 (2.795 speedup)
+omp_get_num_threads = 4
+Parallel(1):   101176 (5.921 speedup)
+omp_get_num_threads = 6
+Parallel(1):    69738 (8.590 speedup)
+omp_get_num_threads = 8
+Parallel(1):   103787 (5.772 speedup)
+omp_get_num_threads = 10
+Parallel(1):    84037 (7.128 speedup)
+omp_get_num_threads = 12
+Parallel(1):    70650 (8.479 speedup)
+omp_get_num_threads = 16
+Parallel(1):    96919 (6.181 speedup)
+
+Graph Size: 1440, #thread: 16, Time (usec):
+Sequential:  4013733
+omp_get_num_threads = 2
+Parallel(1):  1504605 (2.668 speedup)
+omp_get_num_threads = 4
+Parallel(1):   793869 (5.056 speedup)
+omp_get_num_threads = 6
+Parallel(1):   545665 (7.356 speedup)
+omp_get_num_threads = 8
+Parallel(1):   820127 (4.894 speedup)
+omp_get_num_threads = 10
+Parallel(1):   658997 (6.091 speedup)
+omp_get_num_threads = 12
+Parallel(1):   550867 (7.286 speedup)
+omp_get_num_threads = 16
+Parallel(1):   694497 (5.779 speedup)
+
+Graph Size: 2880, #thread: 16, Time (usec):
+Sequential: 35400723
+omp_get_num_threads = 2
+Parallel(1): 13792194 (2.567 speedup)
+omp_get_num_threads = 4
+Parallel(1):  7680155 (4.609 speedup)
+omp_get_num_threads = 6
+Parallel(1):  5651877 (6.264 speedup)
+omp_get_num_threads = 8
+Parallel(1):  7391303 (4.790 speedup)
+omp_get_num_threads = 10
+Parallel(1):  5873909 (6.027 speedup)
+omp_get_num_threads = 12
+Parallel(1):  5165193 (6.854 speedup)
+omp_get_num_threads = 16
+Parallel(1):  6723299 (5.265 speedup)
+
+Graph Size: 4320, #thread: 16, Time (usec):
+Sequential: 117489698
+omp_get_num_threads = 2
+Parallel(1): 45508958 (2.582 speedup)
+omp_get_num_threads = 4
+Parallel(1): 24056843 (4.884 speedup)
+omp_get_num_threads = 6
+Parallel(1): 19957222 (5.887 speedup)
+omp_get_num_threads = 8
+Parallel(1): 23873210 (4.921 speedup)
+omp_get_num_threads = 10
+Parallel(1): 19851160 (5.919 speedup)
+omp_get_num_threads = 12
+Parallel(1): 18769312 (6.260 speedup)
+omp_get_num_threads = 16
+Parallel(1): 21759309 (5.400 speedup)
+
