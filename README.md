@@ -1,5 +1,7 @@
-#### Parallel Version of Floyd-Warshall (All-pair Shortest Path) Algorithm
+### Parallel Floyd-Warshall (All-Pair Shortest Path) Algorithm
 
-##### OpenMPI
+#### OpenMPI
 
-##### OpenMP
+#### OpenMP
+
+#### CUDA
