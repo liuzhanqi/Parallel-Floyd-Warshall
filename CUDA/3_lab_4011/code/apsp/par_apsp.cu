@@ -11,8 +11,8 @@
 #include <helper_cuda.h>
 #include <helper_functions.h> // helper functions for SDK examples
 
-#define BLOCK_SIZE 32
-#define THREAD_SIZE 32
+#define BLOCK_SIZE 8
+#define THREAD_SIZE 8
 #define INF 599999999
 
 ////////////////////////////////////////////////////////////////////////////////

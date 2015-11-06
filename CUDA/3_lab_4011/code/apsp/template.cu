@@ -38,7 +38,7 @@ void run_apsp(int argc, char **argv) {
         sdkCreateTimer(&timer);
         sdkStartTimer(&timer);
 
-        par_apsp(N, mat);
+        par_apsp_blocked_processing(N, mat);
 
         sdkStopTimer(&timer);
         par_time = sdkGetTimerValue(&timer);
