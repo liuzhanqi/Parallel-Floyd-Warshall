@@ -132,23 +132,24 @@ void par_apsp(int N, int *mat) {
     cudaMemcpy(mat, d_mat, size, cudaMemcpyDeviceToHost);
 }
 
-__global__ void kernel_phase_one(const unsigned int BLOCK_SIZE, 
-                                 const unsigned int block, 
+__global__ void kernel_phase_one(const unsigned int block, 
                                  const unsigned int N, 
                                  int * const d) {
     int i;
     int newPath;
 
+    const int VIRTUAL_BLOCK_SIZE = BLOCK_SIZE * THREAD_SIZE;
+
     const int tx = threadIdx.x; 
     const int ty = threadIdx.y;
     
-    const int v1 = BLOCK_SIZE * block + ty;
-    const int v2 = BLOCK_SIZE * block + tx;  
+    const int v1 = VIRTUAL_BLOCK_SIZE * block + ty;
+    const int v2 = VIRTUAL_BLOCK_SIZE * block + tx;  
 
     const int cell = v1 * N + v2;
 
-    __shared__ int primary_d[BLOCK_SIZE][BLOCK_SIZE];
-    __shared__ int primary_p[BLOCK_SIZE][BLOCK_SIZE];
+    __shared__ int primary_d[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
+    __shared__ int primary_p[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
 
     if (v1 < N && v2 < N) primary_d[ty][tx] = d[cell];
     else primary_d[ty][tx] = INF;
@@ -156,7 +157,7 @@ __global__ void kernel_phase_one(const unsigned int BLOCK_SIZE,
     // Synchronize to make sure the all value are loaded in block
     __syncthreads();
 
-    for (i=0; i<BLOCK_SIZE; i++) {
+    for (i=0; i<VIRTUAL_BLOCK_SIZE; i++) {
         if (primary_d[ty][i] != -1 && primary_d[i][tx] != -1) {
             newPath = primary_d[ty][i] + primary_d[i][tx];
             if (newPath < primary_d[ty][tx] || primary_d[ty][tx] == -1) primary_d[ty][tx] = newPath;
@@ -169,11 +170,11 @@ __global__ void kernel_phase_one(const unsigned int BLOCK_SIZE,
 }
 
 
-__global__ void kernel_phase_two(const unsigned int BLOCK_SIZE, 
-                                 const unsigned int block, 
+__global__ void kernel_phase_two(const unsigned int block, 
                                  const unsigned int N, 
                                  int * const d) {
     if (blockIdx.x == block) return;
+    const int VIRTUAL_BLOCK_SIZE = BLOCK_SIZE * THREAD_SIZE;
 
     int i;
     int newPath;
@@ -181,11 +182,11 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
     int tx = threadIdx.x;
     int ty = threadIdx.y;
 
-    int v1 = BLOCK_SIZE * block + ty;
-    int v2 = BLOCK_SIZE * block + tx;
+    int v1 = VIRTUAL_BLOCK_SIZE * block + ty;
+    int v2 = VIRTUAL_BLOCK_SIZE * block + tx;
     
-    __shared__ int primary_d[BLOCK_SIZE][BLOCK_SIZE];
-    __shared__ int current_d[BLOCK_SIZE][BLOCK_SIZE];
+    __shared__ int primary_d[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
+    __shared__ int current_d[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
 
     const int cell_primary = v1 * N + v2;
     if (v1 < N && v2 < N) primary_d[ty][tx] = d[cell_primary];
@@ -193,13 +194,13 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
     
     // Load i-aligned singly dependent blocks
     if (blockIdx.y == 0) {
-        v1 = BLOCK_SIZE * block + ty;
-        v2 = BLOCK_SIZE * blockIdx.x + tx;
+        v1 = VIRTUAL_BLOCK_SIZE * block + ty;
+        v2 = VIRTUAL_BLOCK_SIZE * blockIdx.x + tx;
     }
     // Load j-aligned singly dependent blocks
     else  {
-        v1 = BLOCK_SIZE * blockIdx.x + ty;
-        v2 = BLOCK_SIZE * block + tx;
+        v1 = VIRTUAL_BLOCK_SIZE * blockIdx.x + ty;
+        v2 = VIRTUAL_BLOCK_SIZE * block + tx;
     }
     
     const int cell_current = v1 * N + v2;
@@ -212,7 +213,7 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
     // Compute i-aligned singly dependent blocks
     if (blockIdx.y == 0)
     {
-        for (i=0; i<BLOCK_SIZE; i++) {
+        for (i=0; i<VIRTUAL_BLOCK_SIZE; i++) {
             if (primary_d[ty][i] != -1  && current_d[i][tx] != -1) {
                 newPath = primary_d[ty][i] + current_d[i][tx];
                 
@@ -222,7 +223,7 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
     }
     // Compute j-aligned singly dependent blocks
     else {
-        for (i=0; i<BLOCK_SIZE; i++) {
+        for (i=0; i<VIRTUAL_BLOCK_SIZE; i++) {
             if (current_d[ty][i] != -1 && primary_d[i][tx] != -1) {
                 newPath = current_d[ty][i] + primary_d[i][tx];
             
@@ -234,9 +235,7 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
     if (v1 < N && v2 < N) d[cell_current] = current_d[ty][tx];
 }
 
-__global__ void kernel_phase_three(int BLOCK_SIZE,          
-                                   int THREAD_SIZE, 
-                                   unsigned int block, 
+__global__ void kernel_phase_three(unsigned int block, 
                                    const unsigned int N, 
                                    int * const d) {
     if (blockIdx.x == block || blockIdx.y == block) return;
@@ -327,9 +326,9 @@ void par_apsp_blocked_processing(int N, int *mat) {
     int numOfBlock = (N - 1) / VIRTUAL_BLOCK_SIZE;
 
     for (int block = 0; block <= numOfBlock; block++) {
-        kernel_phase_one<<<1, dimBlockP1>>>(VIRTUAL_BLOCK_SIZE, block, N, d_mat);
-        kernel_phase_two<<<dimGridP2, dimBlockP2>>>(VIRTUAL_BLOCK_SIZE, block, N, d_mat);
-        kernel_phase_three<<<dimGridP3, dimBlockP3>>>(BLOCK_SIZE, THREAD_SIZE, block, N, d_mat);       
+        kernel_phase_one<<<1, dimBlockP1>>>(block, N, d_mat);
+        kernel_phase_two<<<dimGridP2, dimBlockP2>>>(block, N, d_mat);
+        kernel_phase_three<<<dimGridP3, dimBlockP3>>>(block, N, d_mat);       
     }
 
     cudaMemcpy(mat, d_mat, size, cudaMemcpyDeviceToHost);
