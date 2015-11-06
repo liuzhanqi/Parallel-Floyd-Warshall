@@ -106,7 +106,9 @@ __global__ void apspKernel(int N, int k, int *g_idata, int *g_odata) {
     const unsigned int i = (bid * bdim + tid)/N;
     const unsigned int j = (bid * bdim + tid)%N;
 
-    g_odata[i*N+j] = min(g_idata[i*N+j], g_idata[i*N+k]+g_idata[k*N+j]);
+    if (g_idata[i*N+k] == -1 || g_idata[k*N+j] == -1) g_odata[i*N+j] = g_idata[i*N+j];
+    else if (g_idata[i*N+j] == -1) g_odata[i*N+j] = g_idata[i*N+k]+g_idata[k*N+j];
+    else g_odata[i*N+j] = min(g_idata[i*N+j], g_idata[i*N+k]+g_idata[k*N+j]);
 }
 
 void par_apsp(int N, int *mat) {
