@@ -295,9 +295,11 @@ __global__ void kernel_phase_three(unsigned int block,
                 idx = tx + j;
 
                 for (k=0; k<BLOCK_SIZE * THREAD_SIZE; k++) {
-                    newPath = primaryCol_d[idy][k] + primaryRow_d[k][idx];
-                    if (path > newPath) {
-                        path = newPath;
+                    if (primaryCol_d[idy][k] != -1 && primaryRow_d[k][idx] != -1) {
+                        newPath = primaryCol_d[idy][k] + primaryRow_d[k][idx];
+                        if (path > newPath || path == -1) {
+                            path = newPath;
+                        }
                     }
                 }
                 d[block] = path;
