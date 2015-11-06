@@ -159,7 +159,6 @@ __global__ void kernel_phase_one(const unsigned int BLOCK_SIZE,
     for (i=0; i<BLOCK_SIZE; i++) {
         if (primary_d[ty][i] != -1 && primary_d[i][tx] != -1) {
             newPath = primary_d[ty][i] + primary_d[i][tx];
-            __syncthreads();
             if (newPath < primary_d[ty][tx] || primary_d[ty][tx] == -1) primary_d[ty][tx] = newPath;
         }
     }
@@ -217,7 +216,6 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
             if (primary_d[ty][i] != -1  && current_d[i][tx] != -1) {
                 newPath = primary_d[ty][i] + current_d[i][tx];
                 
-                __syncthreads();
                 if (newPath < current_d[ty][tx] || current_d[ty][tx] == -1) current_d[ty][tx] = newPath;
             }
         }
@@ -228,7 +226,6 @@ __global__ void kernel_phase_two(const unsigned int BLOCK_SIZE,
             if (current_d[ty][i] != -1 && primary_d[i][tx] != -1) {
                 newPath = current_d[ty][i] + primary_d[i][tx];
             
-            __syncthreads();
             if (newPath < current_d[ty][tx] || current_d[ty][tx] == -1) current_d[ty][tx] = newPath;
             }
         }
