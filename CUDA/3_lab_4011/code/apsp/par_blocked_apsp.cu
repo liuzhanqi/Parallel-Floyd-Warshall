@@ -20,6 +20,7 @@
 // http://devblogs.nvidia.com/parallelforall/maxwell-most-advanced-cuda-gpu-ever-made/
 // http://stackoverflow.com/questions/6563261/how-to-use-coalesced-memory-access
 // https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+// http://stackoverflow.com/questions/21797582/cuda-6-simplest-sample-segmentation-fault
 // 
 // Katz, Gary J., and Joseph T. Kider Jr. 
 // "All-pairs shortest-paths for large graphs on the GPU." 
