@@ -138,8 +138,8 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 	if (hor_mat_j >= start)
 		hor_mat_j += BLOCK_SIZE;
 	int hor_mat_ij = hor_mat_i * BLOCK_SIZE + hor_mat_j;
-	// for (int t = 0; t < THREAD_SIZE; t++)
-	// 	hor[i + t][j] = mat_device[hor_mat_ij + t * N];
+	for (int t = 0; t < THREAD_SIZE; t++)
+		hor[i + t][j] = mat_device[hor_mat_ij + t * N];
 	// __syncthreads();
 
 	__shared__ int ver[BLOCK_SIZE][BLOCK_SIZE];
@@ -148,10 +148,8 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 		ver_mat_i += BLOCK_SIZE;
 	int ver_mat_j = start + j;
 	int ver_mat_ij = ver_mat_i * BLOCK_SIZE + ver_mat_j;
-	for (int t = 0; t < THREAD_SIZE; t++) {
-		hor[i + t][j] = mat_device[hor_mat_ij + t * N];
+	for (int t = 0; t < THREAD_SIZE; t++)
 		ver[i + t][j] = mat_device[ver_mat_ij + t * N];
-	}
 	__syncthreads();
 
 	__shared__ int block[BLOCK_SIZE][BLOCK_SIZE];
