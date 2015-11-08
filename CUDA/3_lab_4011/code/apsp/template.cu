@@ -14,6 +14,7 @@
 // cly: includes, apsp
 #include "apsp.h"
 #include "par_apsp.h"
+#include "par_blocked_apsp.h"
 
 void run_apsp(int argc, char **argv);
 
@@ -38,7 +39,7 @@ void run_apsp(int argc, char **argv) {
         sdkCreateTimer(&timer);
         sdkStartTimer(&timer);
 
-        par_apsp_blocked_processing(N, mat);
+        par_blocked_apsp(N, mat);
 
         sdkStopTimer(&timer);
         par_time = sdkGetTimerValue(&timer);

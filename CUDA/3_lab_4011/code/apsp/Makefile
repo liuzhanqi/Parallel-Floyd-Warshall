@@ -240,7 +240,10 @@ apsp.o:apsp.cpp
 par_apsp.o:par_apsp.cu
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-template: template.o apsp.o par_apsp.o
+par_blocked_apsp.o:par_blocked_apsp.cu
+	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
+
+template: template.o apsp.o par_apsp.o par_blocked_apsp.o
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 	# $(EXEC) mkdir -p ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)
 	# $(EXEC) cp $@ ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)
@@ -249,7 +252,7 @@ run: build
 	$(EXEC) ./template
 
 clean:
-	rm -f template template.o apsp.o par_apsp.o
+	rm -f template template.o apsp.o par_apsp.o par_blocked_apsp.o
 	rm -rf ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)/template
 
 clobber: clean
