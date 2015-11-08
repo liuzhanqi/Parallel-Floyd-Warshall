@@ -13,7 +13,7 @@
 
 // cly: includes, apsp
 #include "apsp.h"
-#include "par_apsp.h"
+// #include "par_apsp.h"
 #include "par_blocked_apsp.h"
 
 void run_apsp(int argc, char **argv);
@@ -43,7 +43,11 @@ void run_apsp(int argc, char **argv) {
 
         sdkStopTimer(&timer);
         par_time = sdkGetTimerValue(&timer);
+        #if (BLOCK_SIZE && THREAD_SIZE)
+        printf("Processing time: %10.3f (ms) parallel (block %dx%d thread %dx%d\n", par_time, BLOCK_SIZE, BLOCK_SIZE, THREAD_SIZE, THREAD_SIZE);
+        #else
         printf("Processing time: %10.3f (ms) parallel\n", par_time);
+        #endif
         sdkDeleteTimer(&timer);        
     }
 

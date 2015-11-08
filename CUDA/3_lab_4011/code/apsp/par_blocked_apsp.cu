@@ -11,7 +11,9 @@
 #include <helper_cuda.h>
 #include <helper_functions.h> // helper functions for SDK examples
 
-#define BLOCK_SIZE 16
+#include "par_blocked_apsp.h"
+
+
 
 __global__ void pass_one(int N, int *mat_device, int start) {
 	int i = threadIdx.y;
@@ -152,7 +154,7 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 
 inline void do_tre(int N, int *mat_device, int n_block, int start) {
 
-	dim3 dimBlock(n_block - 1, n_block - 1, 1); // 0: horizontal ---, 1: vertical |||
+	dim3 dimBlock(n_block - 1, n_block - 1, 1);
 	dim3 dimGrid(BLOCK_SIZE, BLOCK_SIZE, 1);
 	pass_tre<<<dimBlock, dimGrid>>>(N, mat_device, start);
 
