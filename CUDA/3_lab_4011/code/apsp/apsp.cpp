@@ -17,8 +17,6 @@ void gen_apsp(int N, int *mat) {
 	ref = (int*)malloc(sizeof(int) * N * N);
 	for (int i = 0; i < N * N; i++)
 		ref[i] = mat[i];
-
-	printf("Graph Size: %d\n", N);
 }
 
 void seq_apsp() {

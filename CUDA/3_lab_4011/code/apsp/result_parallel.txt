@@ -1,0 +1,64 @@
+Graph size: 512, repeat 3 times
+Processing time:      3.333 (ms) parallel (block 32x32 thread size 2
+Graph size: 1024, repeat 3 times
+Processing time:     18.333 (ms) parallel (block 32x32 thread size 2
+Graph size: 1536, repeat 3 times
+Processing time:     55.667 (ms) parallel (block 32x32 thread size 2
+Graph size: 2048, repeat 3 times
+Processing time:    121.000 (ms) parallel (block 32x32 thread size 2
+Graph size: 2560, repeat 3 times
+Processing time:    230.333 (ms) parallel (block 32x32 thread size 2
+Graph size: 3072, repeat 3 times
+Processing time:    393.333 (ms) parallel (block 32x32 thread size 2
+Graph size: 3584, repeat 3 times
+Processing time:    619.667 (ms) parallel (block 32x32 thread size 2
+Graph size: 4096, repeat 3 times
+Processing time:    920.333 (ms) parallel (block 32x32 thread size 2
+Graph size: 512, repeat 3 times
+Processing time:      3.333 (ms) parallel (block 16x16 thread size 2
+Graph size: 1024, repeat 3 times
+Processing time:     20.333 (ms) parallel (block 16x16 thread size 2
+Graph size: 1536, repeat 3 times
+Processing time:     64.333 (ms) parallel (block 16x16 thread size 2
+Graph size: 2048, repeat 3 times
+Processing time:    138.333 (ms) parallel (block 16x16 thread size 2
+Graph size: 2560, repeat 3 times
+Processing time:    264.000 (ms) parallel (block 16x16 thread size 2
+Graph size: 3072, repeat 3 times
+Processing time:    452.333 (ms) parallel (block 16x16 thread size 2
+Graph size: 3584, repeat 3 times
+Processing time:    713.000 (ms) parallel (block 16x16 thread size 2
+Graph size: 4096, repeat 3 times
+Processing time:   1060.000 (ms) parallel (block 16x16 thread size 2
+Graph size: 512, repeat 3 times
+Processing time:      3.000 (ms) parallel (block 32x32 thread size 1
+Graph size: 1024, repeat 3 times
+Processing time:     19.000 (ms) parallel (block 32x32 thread size 1
+Graph size: 1536, repeat 3 times
+Processing time:     61.000 (ms) parallel (block 32x32 thread size 1
+Graph size: 2048, repeat 3 times
+Processing time:    140.000 (ms) parallel (block 32x32 thread size 1
+Graph size: 2560, repeat 3 times
+Processing time:    269.000 (ms) parallel (block 32x32 thread size 1
+Graph size: 3072, repeat 3 times
+Processing time:    461.333 (ms) parallel (block 32x32 thread size 1
+Graph size: 3584, repeat 3 times
+Processing time:    729.333 (ms) parallel (block 32x32 thread size 1
+Graph size: 4096, repeat 3 times
+Processing time:   1085.333 (ms) parallel (block 32x32 thread size 1
+Graph size: 512, repeat 3 times
+Processing time:      5.000 (ms) parallel (block 32x32 thread size 4
+Graph size: 1024, repeat 3 times
+Processing time:     26.333 (ms) parallel (block 32x32 thread size 4
+Graph size: 1536, repeat 3 times
+Processing time:     80.333 (ms) parallel (block 32x32 thread size 4
+Graph size: 2048, repeat 3 times
+Processing time:    171.333 (ms) parallel (block 32x32 thread size 4
+Graph size: 2560, repeat 3 times
+Processing time:    330.333 (ms) parallel (block 32x32 thread size 4
+Graph size: 3072, repeat 3 times
+Processing time:    565.333 (ms) parallel (block 32x32 thread size 4
+Graph size: 3584, repeat 3 times
+Processing time:    893.667 (ms) parallel (block 32x32 thread size 4
+Graph size: 4096, repeat 3 times
+Processing time:   1329.667 (ms) parallel (block 32x32 thread size 4

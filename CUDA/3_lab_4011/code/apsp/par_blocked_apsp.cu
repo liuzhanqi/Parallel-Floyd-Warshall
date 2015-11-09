@@ -12,6 +12,7 @@
 #include <helper_functions.h> // helper functions for SDK examples
 
 #include "par_blocked_apsp.h"
+#include "configure.h"
 
 // 
 // reference
@@ -21,6 +22,9 @@
 // http://stackoverflow.com/questions/6563261/how-to-use-coalesced-memory-access
 // https://docs.nvidia.com/cuda/cuda-c-programming-guide/
 // http://stackoverflow.com/questions/21797582/cuda-6-simplest-sample-segmentation-fault
+// https://devtalk.nvidia.com/default/topic/517828/speed-up-initialization-of-cuda-about-how-to-set-the-device-code-translation-cache/
+// http://devblogs.nvidia.com/parallelforall/unified-memory-in-cuda-6/
+// http://jasonjuang.blogspot.sg/2014/02/what-is-bank-conflict-in-cuda.html
 // 
 // Katz, Gary J., and Joseph T. Kider Jr. 
 // "All-pairs shortest-paths for large graphs on the GPU." 
@@ -39,8 +43,6 @@ __global__ void pass_one(int N, int *mat_device, int start) {
 	int mat_ij = mat_i * N + mat_j;
 	for (int t = 0; t < THREAD_SIZE; t++)
 		block[i + t][j] = mat_device[mat_ij + t * N];
-
-	// __syncthreads();
 
 	for (int k = 0; k < BLOCK_SIZE; k++) {
 		for (int t = 0; t < THREAD_SIZE; t++) {
@@ -100,7 +102,6 @@ __global__ void pass_two(int N, int *mat_device, int start) {
 	
 	for (int t = 0; t < THREAD_SIZE; t++)
 		block[i + t][j] = mat_device[mat_ij + t * N];
-	// __syncthreads();
 
 	for (int k = 0; k < BLOCK_SIZE; k++) {
 		for (int t = 0; t < THREAD_SIZE; t++) {
@@ -112,7 +113,6 @@ __global__ void pass_two(int N, int *mat_device, int start) {
 				if (dij == -1 || dij > d)
 					dij = d;
 			}
-			// __syncthreads();	
 		}
 	}
 
@@ -140,7 +140,6 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 	int hor_mat_ij = hor_mat_i * BLOCK_SIZE + hor_mat_j;
 	for (int t = 0; t < THREAD_SIZE; t++)
 		hor[i + t][j] = mat_device[hor_mat_ij + t * N];
-	// __syncthreads();
 
 	__shared__ int ver[BLOCK_SIZE][BLOCK_SIZE];
 	int ver_mat_i = start + i;
@@ -162,7 +161,6 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 	int mat_ij = mat_i * N + mat_j;
 	for (int t = 0; t < THREAD_SIZE; t++)
 		block[i + t][j] = mat_device[mat_ij + t * N];
-	// __syncthreads();
 
 	for (int k = 0; k < BLOCK_SIZE; k++) {
 		for (int t = 0; t < THREAD_SIZE; t++) {
@@ -174,7 +172,6 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 				if (dij == -1 || dij > d)
 					dij = d;
 			}
-			// __syncthreads();	
 		}
 	}
 
@@ -193,9 +190,13 @@ inline void do_tre(int N, int *mat_device, int n_block, int start) {
 void par_blocked_apsp(int N, int *mat) {
     
     int *mat_device;
+#ifdef UNIFIED_MEMORY
+    mat_device = mat;
+#else
     size_t size = N * N * sizeof(int);
     cudaMalloc(&mat_device, size);
     cudaMemcpy(mat_device, mat, size, cudaMemcpyHostToDevice);
+#endif
 
     int n_block = N / BLOCK_SIZE;
     for (int i = 0; i < n_block; i++) {
@@ -205,7 +206,11 @@ void par_blocked_apsp(int N, int *mat) {
         do_tre(N, mat_device, n_block, start);
     }
 
+#ifdef UNIFIED_MEMORY
+    cudaDeviceSynchronize();
+#else
     cudaMemcpy(mat, mat_device, size, cudaMemcpyDeviceToHost);
     cudaFree(mat_device);
+#endif
 
 }

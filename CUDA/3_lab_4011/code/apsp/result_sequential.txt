@@ -1,0 +1,16 @@
+Graph size: 512, repeat 3 times
+Processing time:    914.333 (ms) sequential
+Graph size: 1024, repeat 3 times
+Processing time:   7126.000 (ms) sequential
+Graph size: 1536, repeat 3 times
+Processing time:  23507.333 (ms) sequential
+Graph size: 2048, repeat 3 times
+Processing time:  56341.000 (ms) sequential
+Graph size: 2560, repeat 3 times
+Processing time: 110374.333 (ms) sequential
+Graph size: 3072, repeat 3 times
+Processing time: 190604.333 (ms) sequential
+Graph size: 3584, repeat 3 times
+Processing time: 302523.667 (ms) sequential
+Graph size: 4096, repeat 3 times
+Processing time: 450295.000 (ms) sequential
