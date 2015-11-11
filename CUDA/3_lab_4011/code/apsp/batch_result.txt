@@ -228,3 +228,6 @@ Graph size: 7680, Repeat 5 times
 Run Sequential... Processing Time: 				2979725.000 ms
 
 
+Graph size: 8192, Repeat 5 times
+Run Sequential... Processing Time: 				3617588.800 ms
+
