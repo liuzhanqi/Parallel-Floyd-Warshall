@@ -4,12 +4,14 @@
 
 
 #define BLOCK_SIZE 32
-#define THREAD_SIZE 4
+#define THREAD_SIZE 2
+#define THREAD_DO_VERTICAL
 
 // #define UNIFIED_MEMORY
 
-#define REPEAT 3
+#define REPEAT 5
 // #define RUN_SEQUENTIAL
+#define RUN_PARALLEL
 
 #define APSP_VERSION 0
 

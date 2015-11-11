@@ -32,6 +32,25 @@
 // Eurographics Association, 2008.
 // 
 
+__device__ inline void assign(int N, int des[][BLOCK_SIZE], int i, int j, int *src, int mat_ij) {
+	for (int t = 0; t < THREAD_SIZE; t++)
+#ifdef THREAD_DO_VERTICAL
+		des[i + t][j] = src[mat_ij + t * N];
+#else
+		des[i][j + t] = src[mat_ij + t];
+#endif
+}
+
+__device__ inline void assign(int N, int *des, int mat_ij, int src[][BLOCK_SIZE], int i, int j) {
+	for (int t = 0; t < THREAD_SIZE; t++)
+#ifdef THREAD_DO_VERTICAL
+		des[mat_ij + t * N] = src[i + t][j];
+#else
+		des[mat_ij + t] = src[i][j + t];
+#endif
+}
+
+
 
 __global__ void pass_one(int N, int *mat_device, int start) {
 	int i = threadIdx.y * THREAD_SIZE;
@@ -129,8 +148,13 @@ inline void do_two(int N, int *mat_device, int n_block, int start) {
 }
 
 __global__ void pass_tre(int N, int *mat_device, int start) {
+#ifdef THREAD_DO_VERTICAL
 	int i = threadIdx.y * THREAD_SIZE;
 	int j = threadIdx.x;
+#else
+	int i = threadIdx.y;
+	int j = threadIdx.x * THREAD_SIZE;
+#endif
 
 	__shared__ int hor[BLOCK_SIZE][BLOCK_SIZE];
 	int hor_mat_i = start + i;
@@ -138,8 +162,9 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 	if (hor_mat_j >= start)
 		hor_mat_j += BLOCK_SIZE;
 	int hor_mat_ij = hor_mat_i * BLOCK_SIZE + hor_mat_j;
-	for (int t = 0; t < THREAD_SIZE; t++)
-		hor[i + t][j] = mat_device[hor_mat_ij + t * N];
+	assign(N, hor, i, j, mat_device, hor_mat_ij);
+	// for (int t = 0; t < THREAD_SIZE; t++)
+	// 	hor[i + t][j] = mat_device[hor_mat_ij + t * N];
 
 	__shared__ int ver[BLOCK_SIZE][BLOCK_SIZE];
 	int ver_mat_i = start + i;
@@ -147,8 +172,9 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 		ver_mat_i += BLOCK_SIZE;
 	int ver_mat_j = start + j;
 	int ver_mat_ij = ver_mat_i * BLOCK_SIZE + ver_mat_j;
-	for (int t = 0; t < THREAD_SIZE; t++)
-		ver[i + t][j] = mat_device[ver_mat_ij + t * N];
+	assign(N, ver, i, j, mat_device, ver_mat_ij);
+	// for (int t = 0; t < THREAD_SIZE; t++)
+	// 	ver[i + t][j] = mat_device[ver_mat_ij + t * N];
 	__syncthreads();
 
 	__shared__ int block[BLOCK_SIZE][BLOCK_SIZE];
@@ -159,30 +185,45 @@ __global__ void pass_tre(int N, int *mat_device, int start) {
 	if (mat_j >= start)
 		mat_j += BLOCK_SIZE;
 	int mat_ij = mat_i * N + mat_j;
-	for (int t = 0; t < THREAD_SIZE; t++)
-		block[i + t][j] = mat_device[mat_ij + t * N];
+	assign(N, block, i, j, mat_device, mat_ij);
+	// for (int t = 0; t < THREAD_SIZE; t++)
+	// 	block[i + t][j] = mat_device[mat_ij + t * N];
 
 	for (int k = 0; k < BLOCK_SIZE; k++) {
 		for (int t = 0; t < THREAD_SIZE; t++) {
+#ifdef THREAD_DO_VERTICAL
 			int dik = hor[i + t][k];
 			int dkj = ver[k][j];
+#else
+			int dik = hor[i][k];
+			int dkj = ver[k][j + t];
+#endif
 			if (dik != -1 && dkj != -1) {
 				int d = dik + dkj;
+#ifdef THREAD_DO_VERTICAL
 				int& dij = block[i + t][j];
+#else
+				int& dij = block[i][j + t];
+#endif
 				if (dij == -1 || dij > d)
 					dij = d;
 			}
 		}
 	}
 
-	for (int t = 0; t < THREAD_SIZE; t++)
-		mat_device[mat_ij + t * N] = block[i + t][j];
+	assign(N, mat_device, mat_ij, block, i, j);
+	// for (int t = 0; t < THREAD_SIZE; t++)
+	// 	mat_device[mat_ij + t * N] = block[i + t][j];
 }
 
 inline void do_tre(int N, int *mat_device, int n_block, int start) {
 
 	dim3 dimBlock(n_block - 1, n_block - 1, 1);
+#ifdef THREAD_DO_VERTICAL
 	dim3 dimGrid(BLOCK_SIZE, BLOCK_SIZE / THREAD_SIZE, 1);
+#else
+	dim3 dimGrid(BLOCK_SIZE / THREAD_SIZE, BLOCK_SIZE, 1);
+#endif
 	pass_tre<<<dimBlock, dimGrid>>>(N, mat_device, start);
 
 }

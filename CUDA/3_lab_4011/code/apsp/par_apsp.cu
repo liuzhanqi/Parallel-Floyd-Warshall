@@ -68,7 +68,7 @@ __global__ void kernel_phase_one(const unsigned int block,
     const int cell = v1 * N + v2;
 
     __shared__ int primary_d[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
-    __shared__ int primary_p[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
+    // __shared__ int primary_p[VIRTUAL_BLOCK_SIZE][VIRTUAL_BLOCK_SIZE];
 
     if (v1 < N && v2 < N) primary_d[ty][tx] = d[cell];
     else primary_d[ty][tx] = INF;

@@ -1,0 +1,198 @@
+Graph size: 512, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	3.600 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	18.200 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	54.600 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	121.200 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	232.400 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	395.600 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	619.400 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	920.200 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	1306.000 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	1786.200 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	2372.600 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	3073.800 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	3901.800 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	4868.400 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	5983.200 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 |||  Processing Time: 	7254.600 ms
+
+Graph size: 512, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	3.200 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	19.200 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	57.600 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	125.800 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	240.600 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	411.800 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	649.800 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	965.800 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	1369.200 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	1874.600 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	2489.600 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	3223.600 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	4096.600 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	5112.000 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	6275.400 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 32x32 thread size 2 ---  Processing Time: 	7703.600 ms
+
+Graph size: 512, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	4.000 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	21.000 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	64.200 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	138.200 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	265.400 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	453.200 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	714.000 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	1061.000 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	1505.200 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	2060.200 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	2735.000 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	3587.400 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	4543.600 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	5614.000 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	6903.600 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 16x16 thread size 2 |||  Processing Time: 	8364.000 ms
+
+Graph size: 512, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	1.000 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	2.600 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	4.600 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	6.600 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	9.200 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	13.000 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	17.200 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	23.000 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	28.200 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	34.800 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	40.000 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	48.000 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	56.000 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	65.000 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	74.200 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 64x64 thread size 2 |||  Processing Time: 	84.400 ms
+
+Graph size: 512, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	4.000 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	20.600 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	63.200 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	140.200 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	269.200 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	462.200 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	730.400 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	1086.000 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	1540.000 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	2109.400 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	2802.200 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	3629.000 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	4612.000 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	5756.600 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	7146.600 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 32x32 thread size 1 |||  Processing Time: 	8582.400 ms
+
+Graph size: 512, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	5.000 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	25.800 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	77.800 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	171.200 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	330.000 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	565.200 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	893.400 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	1329.600 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	1887.400 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	2584.200 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	3435.800 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	4454.800 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	5657.800 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	7063.800 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	8772.000 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... block 32x32 thread size 4 |||  Processing Time: 	10580.600 ms
+

@@ -43,6 +43,36 @@ void run_apsp(int argc, char **argv) {
 #endif
     gen_apsp(N, mat);
 
+
+
+    printf("Graph size: %3d, Repeat %d times\n", (int)N, REPEAT);
+#if defined(RUN_PARALLEL)
+    #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
+        const char* conf = "Run Parallel... block %dx%d thread size %d %s %s ";
+    #else
+        const char* conf = "Run Parallel... %s %s\n";
+    #endif
+    #ifdef THREAD_DO_VERTICAL
+        const char* direction = "|||";
+    #else
+        const char* direction = "---";
+    #endif
+
+    #ifdef UNIFIED_MEMORY
+        const char* unified = "use Unified Memory";
+    #else
+        const char* unified = "";
+    #endif
+    #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
+        printf(conf, BLOCK_SIZE, BLOCK_SIZE, THREAD_SIZE, direction, unified);
+    #else
+        printf(conf, BLOCK_SIZE, direction, unified);
+    #endif
+#endif
+
+
+
+#ifdef RUN_PARALLEL
     double avg_par_time = 0;
     for (int i = 1; i <= REPEAT; i++) {
 
@@ -63,7 +93,11 @@ void run_apsp(int argc, char **argv) {
         avg_par_time += (par_time - avg_par_time) / i;
     }
 
+    printf("Processing Time: \t%5.3lf ms\n", avg_par_time);
+#endif
+
 #ifdef RUN_SEQUENTIAL
+    printf("Run Sequential... ");
     double avg_seq_time = 0;
     for (int i = 1; i <= REPEAT; i++) {
 
@@ -79,23 +113,14 @@ void run_apsp(int argc, char **argv) {
 
         avg_seq_time += (seq_time - avg_seq_time) / i;
     }
+
+    printf("Processing Time: \t\t\t\t%10.3lf ms\n", avg_seq_time);
 #endif
 
-#ifdef UNIFIED_MEMORY
-    printf("use Unified Memory\n");
-#endif
-    printf("Graph size: %3d, repeat %d times\n", (int)N, REPEAT);
-    #if (BLOCK_SIZE && THREAD_SIZE)
-    printf("Processing time: %10.3lf (ms) parallel (block %dx%d thread size %d\n", avg_par_time, BLOCK_SIZE, BLOCK_SIZE, THREAD_SIZE);
-    #else
-    printf("Processing time: %10.3lf (ms) parallel\n", avg_par_time);
-    #endif
-#ifdef RUN_SEQUENTIAL
-    printf("Processing time: %10.3lf (ms) sequential\n", avg_seq_time);
-    printf("Speed-up: %5.3lf\n", avg_seq_time / avg_par_time);
-#endif
 
-#ifdef RUN_SEQUENTIAL
+
+#if defined(RUN_PARALLEL) && defined(RUN_SEQUENTIAL)
+    printf("Speed-up: x%5.3lf\n", avg_seq_time / avg_par_time);
     check_apsp(mat);
 #endif
 
