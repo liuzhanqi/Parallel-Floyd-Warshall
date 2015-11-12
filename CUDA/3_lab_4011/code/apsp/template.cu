@@ -14,11 +14,14 @@
 // cly: includes, apsp
 #include "apsp.h"
 
+#include "configure.h"
+
 #if (APSP_VERSION == 1)
 #include "par_apsp.h"
+#elif (APSP_VERSION == 2)
+#include "par_apsp_naive.h"
 #else
 #include "par_blocked_apsp.h"
-#include "configure.h"
 #endif
 
 #ifndef REPEAT
@@ -47,26 +50,30 @@ void run_apsp(int argc, char **argv) {
 
     printf("Graph size: %3d, Repeat %d times\n", (int)N, REPEAT);
 #if defined(RUN_PARALLEL)
-    #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
-        const char* conf = "Run Parallel... block %dx%d thread size %d %s %s ";
-    #else
-        const char* conf = "Run Parallel... %s %s\n";
-    #endif
-    #ifdef THREAD_DO_VERTICAL
-        const char* direction = "|||";
-    #else
-        const char* direction = "---";
-    #endif
+    #if (APSP_VERSION != 2)
+        #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
+            const char* conf = "Run Parallel... block %dx%d thread size %d %s %s ";
+        #else
+            const char* conf = "Run Parallel... %s %s\n";
+        #endif
+        #ifdef THREAD_DO_VERTICAL
+            const char* direction = "|||";
+        #else
+            const char* direction = "---";
+        #endif
 
-    #ifdef UNIFIED_MEMORY
-        const char* unified = "use Unified Memory";
+        #ifdef UNIFIED_MEMORY
+            const char* unified = "use Unified Memory";
+        #else
+            const char* unified = "";
+        #endif
+        #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
+            printf(conf, BLOCK_SIZE, BLOCK_SIZE, THREAD_SIZE, direction, unified);
+        #else
+            printf(conf, BLOCK_SIZE, direction, unified);
+        #endif
     #else
-        const char* unified = "";
-    #endif
-    #if defined(BLOCK_SIZE) && defined(THREAD_SIZE)
-        printf(conf, BLOCK_SIZE, BLOCK_SIZE, THREAD_SIZE, direction, unified);
-    #else
-        printf(conf, BLOCK_SIZE, direction, unified);
+        printf("Run Parallel... naive block size (128?) ");
     #endif
 #endif
 
@@ -82,6 +89,8 @@ void run_apsp(int argc, char **argv) {
 
 #if (APSP_VERSION == 1)
         par_apsp_blocked_processing(N, mat);
+#elif (APSP_VERSION == 2)
+        par_apsp(N, mat);
 #else
         par_blocked_apsp(N, mat);
 #endif

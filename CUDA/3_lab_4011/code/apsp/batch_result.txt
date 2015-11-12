@@ -231,3 +231,36 @@ Run Sequential... Processing Time: 				2979725.000 ms
 Graph size: 8192, Repeat 5 times
 Run Sequential... Processing Time: 				3617588.800 ms
 
+Graph size: 512, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	14.200 ms
+Graph size: 1024, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	94.400 ms
+Graph size: 1536, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	298.200 ms
+Graph size: 2048, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	694.600 ms
+Graph size: 2560, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	1321.000 ms
+Graph size: 3072, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	2259.200 ms
+Graph size: 3584, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	3597.000 ms
+Graph size: 4096, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	5466.000 ms
+Graph size: 4608, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	7561.800 ms
+Graph size: 5120, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	10300.000 ms
+Graph size: 5632, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	14231.200 ms
+Graph size: 6144, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	17879.000 ms
+Graph size: 6656, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	22787.800 ms
+Graph size: 7168, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	28243.400 ms
+Graph size: 7680, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	34606.800 ms
+Graph size: 8192, Repeat 5 times
+Run Parallel... naive block size (128?) Processing Time: 	43218.000 ms
+

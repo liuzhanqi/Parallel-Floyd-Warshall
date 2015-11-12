@@ -16,41 +16,6 @@
 
 #define INF 599999999
 
-
-
-__global__ void apspKernel(int N, int k, int *g_idata, int *g_odata) {
-    // access thread id
-    const unsigned int tid = threadIdx.x;
-    // access block id
-    const unsigned int bid = blockIdx.x;
-    // access number of threads in this block
-    const unsigned int bdim = blockDim.x;
-
-    const unsigned int i = (bid * bdim + tid)/N;
-    const unsigned int j = (bid * bdim + tid)%N;
-
-    if (g_idata[i*N+k] == -1 || g_idata[k*N+j] == -1) g_odata[i*N+j] = g_idata[i*N+j];
-    else if (g_idata[i*N+j] == -1) g_odata[i*N+j] = g_idata[i*N+k]+g_idata[k*N+j];
-    else g_odata[i*N+j] = min(g_idata[i*N+j], g_idata[i*N+k]+g_idata[k*N+j]);
-}
-
-void par_apsp(int N, int *mat) {
-    //copy mat from host to device memory d_mat
-    int* d_mat;
-    int* d_mat_out;
-    int size = sizeof(int) * N * N;
-    cudaMalloc((void**) &d_mat, size);
-    cudaMemcpy(d_mat, mat, size, cudaMemcpyHostToDevice);
-    cudaMalloc((void**) &d_mat_out, size);
-
-    for (int k = 0; k < N; k++) {
-        apspKernel<<<ceil(N*N/256), 256>>>(N, k, d_mat, d_mat_out);
-        cudaMemcpy(d_mat, d_mat_out, size, cudaMemcpyDeviceToDevice);
-    }
-
-    cudaMemcpy(mat, d_mat, size, cudaMemcpyDeviceToHost);
-}
-
 __global__ void kernel_phase_one(const unsigned int block, 
                                  const unsigned int N, 
                                  int * const d) {

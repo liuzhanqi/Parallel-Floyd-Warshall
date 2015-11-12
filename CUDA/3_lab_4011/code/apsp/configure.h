@@ -3,6 +3,8 @@
 
 
 
+#define APSP_VERSION 2
+
 #define BLOCK_SIZE 32
 #define THREAD_SIZE 2
 #define THREAD_DO_VERTICAL
@@ -12,8 +14,6 @@
 #define REPEAT 5
 // #define RUN_SEQUENTIAL
 #define RUN_PARALLEL
-
-#define APSP_VERSION 0
 
 
 
